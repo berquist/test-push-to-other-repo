@@ -6,13 +6,16 @@ name: push
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      PUSH_TO_OTHER_REPO_PRIVATE_KEY:
+        required: true
 
 concurrency:
   group: push-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
   cancel-in-progress: true
 
 jobs:
-  build-and-push-docs:
+  do-push:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout

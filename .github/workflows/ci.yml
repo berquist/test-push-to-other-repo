@@ -13,6 +13,11 @@ concurrency:
 jobs:
   push:
     uses: ./.github/workflows/push.yml
+    secrets:
+      # Secrets seem to be isolated, but if the reusable workflow also
+      # triggers on anything in addition to workflow_call, the input secret
+      # needs to have the same name.
+      PUSH_TO_OTHER_REPO_PRIVATE_KEY: ${{ secrets.PUSH_TO_OTHER_REPO_PRIVATE_KEY }}
   all:
     needs: [push]
     runs-on: ubuntu-22.04
