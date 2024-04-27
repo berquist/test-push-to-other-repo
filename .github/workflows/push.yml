@@ -4,15 +4,15 @@ name: push
 
 # yamllint disable-line rule:truthy
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
+  workflow_call:
 
 concurrency:
   group: push-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
   cancel-in-progress: true
 
 jobs:
-  do-push:
+  build-and-push-docs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
