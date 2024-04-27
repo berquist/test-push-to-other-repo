@@ -1,0 +1,39 @@
+---
+# yamllint disable rule:line-length
+name: push
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: push-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
+  cancel-in-progress: true
+
+jobs:
+  build-and-push-docs:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Installs for ssh-agent
+        run: |
+          apt-get update && apt-get install -y openssh-client
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # so versioningit can figure out the version
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Allow repo access (see https://github.com/actions/checkout/issues/760)
+        run: |
+          git config --global --add safe.directory /__w/cclib/cclib
+      - name: Pushes to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.PUSH_TO_OTHER_REPO_PRIVATE_KEY }}
+        with:
+          source-directory: contents_to_copy
+          destination-github-username: berquist
+          destination-repository-name: test-push-to-other-repo-target
+          commit-message: See ORIGIN_COMMIT from $GITHUB_REF
+          target-branch: main
