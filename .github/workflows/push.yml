@@ -27,7 +27,7 @@ jobs:
       - name: Pushes to another repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          SSH_DEPLOY_KEY: ${{ secrets.PUSH_TO_OTHER_REPO_PRIVATE_KEY }}
         with:
           source-directory: contents_to_copy
           destination-github-username: berquist
