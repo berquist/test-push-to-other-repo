@@ -15,9 +15,6 @@ jobs:
   build-and-push-docs:
     runs-on: ubuntu-22.04
     steps:
-      - name: Installs for ssh-agent
-        run: |
-          apt-get update && apt-get install -y openssh-client
       - name: Checkout
         uses: actions/checkout@v4
         with:
